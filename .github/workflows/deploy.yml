@@ -26,8 +26,6 @@ jobs:
           entry="$(find .site_extract -type f -name index.html -print -quit)"
           if [ -z "$entry" ]; then echo 'No index.html was found in the uploaded ZIP.'; exit 1; fi
           cp -R "$(dirname "$entry")"/. _site/
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
