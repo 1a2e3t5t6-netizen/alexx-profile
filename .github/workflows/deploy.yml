@@ -26,26 +26,37 @@ jobs:
           entry="$(find .site_extract -type f -name index.html -print -quit)"
           if [ -z "$entry" ]; then echo 'No index.html was found in the uploaded ZIP.'; exit 1; fi
           cp -R "$(dirname "$entry")"/. _site/
-      - name: Add peaceful video and drifting leaves
+      - name: Add clear video and portfolio motion
         run: |
           cat >> _site/index.html <<'HTML'
           <style>
           html,body,#root,.profile-page{background:transparent!important}
           body{position:relative!important;isolation:isolate}
           #root,.profile-page{position:relative;z-index:2;min-height:100vh;background:transparent!important}
-          #ambient-video{position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;object-fit:cover;z-index:0;opacity:.48;filter:saturate(.72) brightness(1.03);pointer-events:none}
-          #ambient-wash{position:fixed;inset:0;z-index:1;pointer-events:none;background:linear-gradient(125deg,rgba(255,255,255,.78),rgba(250,248,255,.5))}
+          #ambient-video{position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;object-fit:cover;z-index:0;opacity:.58;filter:saturate(.86) brightness(.96);pointer-events:none}
+          #ambient-wash{position:fixed;inset:0;z-index:1;pointer-events:none;background:linear-gradient(125deg,rgba(255,255,255,.20),rgba(250,248,255,.10))}
           .ambient-petal-field{position:fixed;inset:0;z-index:8;overflow:hidden;pointer-events:none}
           .ambient-petal{position:absolute;top:-12vh;width:var(--size);height:calc(var(--size)*1.32);left:var(--x);border-radius:88% 6% 88% 8%;background:linear-gradient(145deg,#fff,#f8f8f4d8);border:1px solid rgba(190,188,177,.48);box-shadow:0 2px 9px rgba(81,76,64,.12),inset 0 0 0 1px rgba(255,255,255,.78);opacity:0;animation:ambient-fall var(--duration) linear var(--delay) infinite}
-          @keyframes ambient-fall{0%{opacity:0;transform:translate3d(0,-8vh,0) rotate(0)}12%{opacity:.74}55%{opacity:.64;transform:translate3d(var(--drift),58vh,0) rotate(390deg)}100%{opacity:0;transform:translate3d(calc(var(--drift)*1.4),116vh,0) rotate(760deg)}}
-          .topbar{background:rgba(255,255,255,.78)!important;backdrop-filter:blur(18px)}
+          @keyframes ambient-fall{0%{opacity:0;transform:translate3d(0,-8vh,0) rotate(0)}12%{opacity:.88}55%{opacity:.76;transform:translate3d(var(--drift),58vh,0) rotate(390deg)}100%{opacity:0;transform:translate3d(calc(var(--drift)*1.4),116vh,0) rotate(760deg)}}
+          .topbar{background:rgba(255,255,255,.76)!important;backdrop-filter:blur(16px)}
           .scene{background:transparent!important}
-          .identity,.interest-card,.record-card,.connect-inner,.social-card{background:rgba(255,255,255,.78)!important;backdrop-filter:blur(18px)}
-          @media(max-width:700px){#ambient-video{opacity:.28}#ambient-wash{background:rgba(255,255,255,.57)}}
-          @media(prefers-reduced-motion:reduce){#ambient-video{display:none}.ambient-petal{animation-duration:48s!important}}
+          .identity,.interest-card,.record-card,.connect-inner,.social-card{background:rgba(255,255,255,.84)!important;backdrop-filter:blur(14px)}
+          .scene-home .identity{animation:portfolio-enter .9s cubic-bezier(.2,.8,.2,1) both}
+          .avatar-wrap{animation:avatar-float 5s ease-in-out infinite;transform-origin:50% 55%}
+          .avatar{transition:transform .45s cubic-bezier(.2,.8,.2,1),filter .45s}
+          .avatar-wrap:hover .avatar{transform:scale(1.055) rotate(-2deg);filter:drop-shadow(0 14px 24px rgba(87,67,157,.28))}
+          .interest-card,.social-card,.record-card{animation:portfolio-enter .8s both;transition:transform .35s ease,box-shadow .35s ease}
+          .interest-card:nth-child(2),.social-card:nth-child(2){animation-delay:.12s}.interest-card:nth-child(3),.social-card:nth-child(3){animation-delay:.22s}.interest-card:nth-child(4){animation-delay:.32s}
+          .interest-card:hover,.social-card:hover,.record-card:hover{transform:translateY(-7px);box-shadow:0 18px 44px rgba(68,52,115,.16)}
+          .tag{transition:transform .25s ease,background .25s ease}.tag:hover{transform:translateY(-3px);background:rgba(192,177,255,.45)}
+          .scene-title{animation:portfolio-enter .8s .08s both}
+          @keyframes portfolio-enter{from{opacity:0;transform:translateY(22px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+          @keyframes avatar-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+          @media(max-width:700px){#ambient-video{opacity:.40}#ambient-wash{background:rgba(255,255,255,.16)}}
+          @media(prefers-reduced-motion:reduce){#ambient-video{display:none}.ambient-petal{animation-duration:48s!important}.avatar-wrap{animation:none!important}*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
           </style>
           <script>
-          (()=>{const add=()=>{if(document.getElementById('ambient-video'))return;const v=document.createElement('video');v.id='ambient-video';v.src='https://videos.pexels.com/video-files/5622115/5622115-uhd_3840_2160_30fps.mp4';v.autoplay=true;v.muted=true;v.loop=true;v.playsInline=true;v.preload='metadata';v.setAttribute('aria-hidden','true');v.tabIndex=-1;document.body.prepend(v);const wash=document.createElement('div');wash.id='ambient-wash';wash.setAttribute('aria-hidden','true');document.body.prepend(wash);const field=document.createElement('div');field.className='ambient-petal-field';field.setAttribute('aria-hidden','true');for(let i=0;i<24;i++){const p=document.createElement('span');p.className='ambient-petal';p.style.setProperty('--x',Math.random()*100+'vw');p.style.setProperty('--size',7+Math.random()*13+'px');p.style.setProperty('--duration',16+Math.random()*24+'s');p.style.setProperty('--delay',-Math.random()*32+'s');p.style.setProperty('--drift',(Math.random()*38-19)+'vw');field.appendChild(p)}document.body.appendChild(field);v.play().catch(()=>{})};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',add,{once:true});else add()})();
+          (()=>{const add=()=>{if(document.getElementById('ambient-video'))return;const v=document.createElement('video');v.id='ambient-video';v.src='https://videos.pexels.com/video-files/5622115/5622115-uhd_3840_2160_30fps.mp4';v.autoplay=true;v.muted=true;v.loop=true;v.playsInline=true;v.preload='metadata';v.setAttribute('aria-hidden','true');v.tabIndex=-1;document.body.prepend(v);const wash=document.createElement('div');wash.id='ambient-wash';wash.setAttribute('aria-hidden','true');document.body.prepend(wash);const field=document.createElement('div');field.className='ambient-petal-field';field.setAttribute('aria-hidden','true');for(let i=0;i<22;i++){const p=document.createElement('span');p.className='ambient-petal';p.style.setProperty('--x',Math.random()*100+'vw');p.style.setProperty('--size',7+Math.random()*13+'px');p.style.setProperty('--duration',16+Math.random()*24+'s');p.style.setProperty('--delay',-Math.random()*32+'s');p.style.setProperty('--drift',(Math.random()*38-19)+'vw');field.appendChild(p)}document.body.appendChild(field);v.play().catch(()=>{})};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',add,{once:true});else add()})();
           </script>
           HTML
       - name: Upload Pages artifact
